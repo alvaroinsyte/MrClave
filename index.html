@@ -1,60 +1,185 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>MrClave</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <title>MrClave - Generador Seguro de Contraseñas</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <link rel="icon" href="lock.png" type="image/png">
 </head>
 <body>
-  <button class="toggle-dark" onclick="toggleDarkMode()" title="Alternar modo oscuro">
+  <button class="toggle-dark" onclick="toggleDarkMode()" title="Alternar modo oscuro" aria-label="Alternar modo oscuro">
     <span id="themeIcon">🌙</span>
   </button>
 
-  <h1><span class="logo-icon">🔐</span> MrClave</h1>
-  <p class="subtitle">Tu generador de contraseñas inteligente y seguro</p>
+  <div class="header-section">
+    <h1><span class="logo-icon">🔐</span> MrClave</h1>
+    <p class="subtitle">Tu generador de contraseñas inteligente y seguro</p>
+  </div>
 
   <div class="container">
-    <label for="length">Longitud de la contraseña:</label>
-    <input type="number" id="length" min="4" max="128" value="16" />
+    <div class="config-section">
+      <div class="length-control">
+        <div class="label-row">
+          <label for="length">Longitud de la contraseña</label>
+          <span class="length-display" id="lengthDisplay">16</span>
+        </div>
+        <input type="range" id="length" min="4" max="128" value="16" class="slider" />
+        <div class="length-markers">
+          <span>Corta</span>
+          <span>Media</span>
+          <span>Larga</span>
+        </div>
+      </div>
 
-    <div class="options">
-      <label><input type="checkbox" id="uppercase" checked /> Mayúsculas (A-Z)</label>
-      <label><input type="checkbox" id="lowercase" checked /> Minúsculas (a-z)</label>
-      <label><input type="checkbox" id="numbers" checked /> Números (0-9)</label>
-      <label><input type="checkbox" id="symbols" checked /> Símbolos (!@#$...)</label>
+      <div class="options-grid">
+        <div class="option-card">
+          <label class="checkbox-wrapper">
+            <input type="checkbox" id="uppercase" checked />
+            <span class="checkbox-custom"></span>
+            <span class="option-content">
+              <span class="option-icon">🔠</span>
+              <span class="option-text">
+                <strong>Mayúsculas</strong>
+                <small>A-Z</small>
+              </span>
+            </span>
+          </label>
+        </div>
+
+        <div class="option-card">
+          <label class="checkbox-wrapper">
+            <input type="checkbox" id="lowercase" checked />
+            <span class="checkbox-custom"></span>
+            <span class="option-content">
+              <span class="option-icon">🔡</span>
+              <span class="option-text">
+                <strong>Minúsculas</strong>
+                <small>a-z</small>
+              </span>
+            </span>
+          </label>
+        </div>
+
+        <div class="option-card">
+          <label class="checkbox-wrapper">
+            <input type="checkbox" id="numbers" checked />
+            <span class="checkbox-custom"></span>
+            <span class="option-content">
+              <span class="option-icon">🔢</span>
+              <span class="option-text">
+                <strong>Números</strong>
+                <small>0-9</small>
+              </span>
+            </span>
+          </label>
+        </div>
+
+        <div class="option-card">
+          <label class="checkbox-wrapper">
+            <input type="checkbox" id="symbols" checked />
+            <span class="checkbox-custom"></span>
+            <span class="option-content">
+              <span class="option-icon">🎯</span>
+              <span class="option-text">
+                <strong>Símbolos</strong>
+                <small>!@#$...</small>
+              </span>
+            </span>
+          </label>
+        </div>
+      </div>
     </div>
 
     <div class="buttons">
-      <button onclick="generatePassword()">🎲 Generar</button>
-      <button class="secondary-btn" onclick="copyPassword()">📋 Copiar</button>
-      <button class="secondary-btn" onclick="exportCSV()">📁 Exportar CSV</button>
+      <button class="btn-primary" onclick="generatePassword()">
+        <span class="btn-icon">🎲</span>
+        <span>Generar Contraseña</span>
+      </button>
+      <button class="btn-secondary" onclick="copyPassword()">
+        <span class="btn-icon">📋</span>
+        <span>Copiar</span>
+      </button>
+      <button class="btn-secondary" onclick="exportCSV()">
+        <span class="btn-icon">📄</span>
+        <span>Exportar CSV</span>
+      </button>
     </div>
 
-    <div class="output-area">
-      <div class="output" id="passwordOutput"></div>
-      <div class="entropy" id="entropyOutput"></div>
-      <div class="strength" id="strengthOutput"></div>
-      <div class="strength-bar"><div id="strengthFill"></div></div>
+    <div class="output-section" id="outputSection">
+      <div class="password-display">
+        <div class="password-wrapper">
+          <div class="password-text" id="passwordOutput">Genera tu primera contraseña</div>
+          <button class="copy-icon-btn" onclick="copyPassword()" title="Copiar contraseña">
+            <span>📋</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">⚡</div>
+          <div class="stat-content">
+            <div class="stat-label">Entropía</div>
+            <div class="stat-value" id="entropyOutput">-- bits</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">🛡️</div>
+          <div class="stat-content">
+            <div class="stat-label">Seguridad</div>
+            <div class="stat-value" id="strengthOutput">--</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="strength-indicator">
+        <div class="strength-bar-container">
+          <div class="strength-bar" id="strengthFill"></div>
+        </div>
+        <div class="strength-labels">
+          <span>Débil</span>
+          <span>Media</span>
+          <span>Fuerte</span>
+        </div>
+      </div>
     </div>
 
-    <div class="history">
-      <h3>Historial</h3>
-      <table id="historyTable">
-        <thead>
-          <tr>
-            <th>Contraseña</th>
-            <th>Entropía</th>
-            <th>Copiar</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+    <div class="history-section">
+      <div class="history-header">
+        <h3>📜 Historial</h3>
+        <button class="btn-clear" onclick="clearHistory()" id="clearBtn" style="display:none;">
+          Limpiar
+        </button>
+      </div>
+      <div class="history-content">
+        <div id="emptyState" class="empty-state">
+          <div class="empty-icon">🔍</div>
+          <p>Aún no has generado contraseñas</p>
+          <small>Tus contraseñas aparecerán aquí</small>
+        </div>
+        <div id="historyTableWrapper" style="display:none;">
+          <table id="historyTable">
+            <thead>
+              <tr>
+                <th>Contraseña</th>
+                <th>Entropía</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
+
+  <footer class="footer">
+    <p>🔒 Todas las contraseñas se generan localmente en tu navegador</p>
+  </footer>
+
+  <div class="toast" id="toast"></div>
 
   <script src="script.js"></script>
 </body>
